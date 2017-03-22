@@ -126,7 +126,16 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
     }
 
     public writeValue(value: Object): void {
-        if (value && value["date"]) {
+        if(value && value instanceof Date ){
+            let date = {
+                year: value.getFullYear(),
+                month: value.getMonth() + 1,
+                day: value.getDate()};
+            let formatted: string = this.utilService.formatDate(date, this.opts.dateFormat, this.opts.monthLabels);
+            this.setInputValue(formatted);
+            this.emitInputFieldChanged(formatted, true);
+        }
+        else if (value && value["date"]) {
             let formatted: string = this.utilService.formatDate(value["date"], this.opts.dateFormat, this.opts.monthLabels);
             this.setInputValue(formatted);
             this.emitInputFieldChanged(formatted, true);
@@ -200,7 +209,7 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
     }
 
     private updateModel(model: IMyDateModel) {
-        this.onChangeCb(model);
+        this.onChangeCb(model.jsdate);
         this.setInputValue(model.formatted);
     }
 
