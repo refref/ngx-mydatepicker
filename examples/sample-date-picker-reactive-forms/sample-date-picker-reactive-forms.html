@@ -47,14 +47,16 @@
                 </div>
 
                 <div class="btnGroup">
-                    <button class="button" type="submit">Submit</button>
+                    <!--<button class="button" type="submit">Submit</button>
                     <button class="button" type="button" (click)="setDate()">Set Today</button>
                     <button class="button" type="button" (click)="resetDate()">Reset Today</button>
                     <button class="button" type="button" (click)="clearDate()">Set Empty</button>
-                    <p class="error" *ngIf="myForm.controls.myDate.errors">Date is required!</p>
+                    <p class="error" *ngIf="myForm.controls.myDate.errors">Date is required!</p>-->
                 </div>
             </form>
 
         </td>
     </tr>
 </table>
+
+{{myForm.value | json}}

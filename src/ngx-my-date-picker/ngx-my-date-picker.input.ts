@@ -126,6 +126,16 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
     }
 
     public writeValue(value: Object): void {
+        if(typeof value === 'string'){
+            let val: Date = new Date(value);
+            let date = {
+                year: val.getFullYear(),
+                month: val.getMonth() + 1,
+                day: val.getDate()};
+            let formatted: string = this.utilService.formatDate(date, this.opts.dateFormat, this.opts.monthLabels);
+            this.setInputValue(formatted);
+            this.emitInputFieldChanged(formatted, true);
+        }
         if(value && value instanceof Date ){
             let date = {
                 year: value.getFullYear(),
@@ -140,7 +150,7 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
             this.setInputValue(formatted);
             this.emitInputFieldChanged(formatted, true);
         }
-        else if (value === "") {
+        else if (!value || value === "") {
             this.setInputValue("");
             this.emitInputFieldChanged("", false);
         }
@@ -192,6 +202,26 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
         }
     }
 
+    public getLocalISOString(date: any) {
+        // Get local time as ISO string with offset at the end
+        let tzo = -date.getTimezoneOffset();
+        let dif = tzo >= 0 ? '+' : '-';
+        let pad = function(n: any, width: any) {
+            width = width || 2;
+            n = Math.abs(Math.floor(n)) + '';
+            return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+        };
+        return date.getFullYear()
+            + '-' + pad(date.getMonth()+1, null)
+            + '-' + pad(date.getDate(), null)
+            + 'T' + pad(date.getHours(), null)
+            + ':' + pad(date.getMinutes(), null)
+            + ':' + pad(date.getSeconds(), null)
+            + '.' + pad(date.getMilliseconds(),3)
+            + dif + pad(tzo / 60, null)
+            + ':' + pad(tzo % 60, null);
+    }
+
     public clearDate() {
         this.emitDateChanged({date: {year: 0, month: 0, day: 0}, jsdate: null, formatted: "", epoc: 0});
         this.emitInputFieldChanged("", false);
@@ -209,7 +239,7 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
     }
 
     private updateModel(model: IMyDateModel) {
-        this.onChangeCb(model.jsdate);
+        this.onChangeCb(this.getLocalISOString(new Date(model.jsdate)));
         this.setInputValue(model.formatted);
     }
 

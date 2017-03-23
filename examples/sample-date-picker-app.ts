@@ -11,9 +11,7 @@ const appTemplate: string = require('./sample-date-picker-app.html');
 })
 
 export class MyDatePickerApp {
-
     constructor() {
         console.log('constructor: MyDatePickerApp');
     }
-
 }
