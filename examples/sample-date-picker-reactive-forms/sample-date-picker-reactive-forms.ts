@@ -25,7 +25,7 @@ export class SampleDatePickerReacticeForms implements OnInit {
         let d: Date = new Date();
         this.myForm = this.formBuilder.group({
             //myDate: ['', Validators.required]   // not initial date set
-            myDate: ['2017-03-23T06:31:00.951+0000', Validators.required]   // this example is initialized to specific date
+            myDate: ['2022-03-23T06:31:00.951+0000', Validators.required]   // this example is initialized to specific date
         });
     }
 

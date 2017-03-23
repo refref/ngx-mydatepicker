@@ -166,7 +166,8 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
 
     public writeValue(value: Object): void {
         if (typeof value === 'string') {
-            let val: Date = new Date(value);
+
+            let val: any = this.parseISO8601(this.convertDateFormat(value));
             let date = {
                 year: val.getFullYear(),
                 month: val.getMonth() + 1,
@@ -243,6 +244,15 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
         }
     }
 
+    /**
+     * Convert string to date, tested works on ie 11
+     * @param date
+     * @returns {Date}
+     */
+    public parseISO8601 (date:string){
+        return new Date(date.substring(0, 10));
+    };
+
     public getLocalISOString(date: any) {
         // Get local time as ISO string with offset at the end
         let tzo = -date.getTimezoneOffset();
@@ -261,6 +271,28 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
             + '.' + pad(date.getMilliseconds(), 3)
             + dif + pad(tzo / 60, null)
             + ':' + pad(tzo % 60, null);
+    }
+
+    /**
+     * Converts 2013-08-03T02:00:00Z to 2013-08-03
+     */
+    private dt: any;
+    private month: any;
+
+    public convertDateFormat(val:string){
+        let date = this.parseISO8601(val);
+
+        let year = date.getFullYear();
+        this.month = date.getMonth()+1;
+        this.dt = date.getDate();
+
+        if (this.dt < 10) {
+            this.dt = '0' + this.dt;
+        }
+        if (this.month < 10) {
+            this.month = '0' + this.month;
+        }
+        return(year+'-' +this.month + '-'+this.dt);
     }
 
     public clearDate() {
