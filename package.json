@@ -1,6 +1,6 @@
 {
-  "name": "ngx-mydatepicker",
-  "version": "0.1.0",
+  "name": "refref-ngx-mydatepicker",
+  "version": "0.1.1",
   "description": "Angular date picker",
   "keywords": [
     "Angular2",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kekeh/ngx-mydatepicker.git"
+    "url": "https://github.com/refref/ngx-mydatepicker.git"
   },
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.dev.js --progress",

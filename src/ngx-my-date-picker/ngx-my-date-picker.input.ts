@@ -1,9 +1,32 @@
-import { Directive, Input, ComponentRef, ElementRef, ViewContainerRef, Renderer, ComponentFactoryResolver, forwardRef, EventEmitter, Output, SimpleChanges, OnChanges, HostListener } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import {
+    Directive,
+    Input,
+    ComponentRef,
+    ElementRef,
+    ViewContainerRef,
+    Renderer,
+    ComponentFactoryResolver,
+    forwardRef,
+    EventEmitter,
+    Output,
+    SimpleChanges,
+    OnChanges,
+    HostListener
+} from "@angular/core";
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 
-import { IMyDate, IMyDateRange, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyCalendarViewChanged, IMyInputFieldChanged } from "./interfaces/index";
-import { NgxMyDatePicker } from "./ngx-my-date-picker.component";
-import { UtilService } from "./services/ngx-my-date-picker.util.service";
+import {
+    IMyDate,
+    IMyDateRange,
+    IMyDayLabels,
+    IMyMonthLabels,
+    IMyOptions,
+    IMyDateModel,
+    IMyCalendarViewChanged,
+    IMyInputFieldChanged
+} from "./interfaces/index";
+import {NgxMyDatePicker} from "./ngx-my-date-picker.component";
+import {UtilService} from "./services/ngx-my-date-picker.util.service";
 
 const NGX_DP_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
@@ -35,7 +58,20 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
     // Default options
     private opts: IMyOptions = {
         dayLabels: <IMyDayLabels> {su: "Sun", mo: "Mon", tu: "Tue", we: "Wed", th: "Thu", fr: "Fri", sa: "Sat"},
-        monthLabels: <IMyMonthLabels> {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"},
+        monthLabels: <IMyMonthLabels> {
+            1: "Jan",
+            2: "Feb",
+            3: "Mar",
+            4: "Apr",
+            5: "May",
+            6: "Jun",
+            7: "Jul",
+            8: "Aug",
+            9: "Sep",
+            10: "Oct",
+            11: "Nov",
+            12: "Dec"
+        },
         dateFormat: <string> "yyyy-mm-dd",
         showTodayBtn: <boolean> true,
         todayBtnTxt: <string> "Today",
@@ -62,10 +98,13 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
         ariaLabelNextYear: <string> "Next Year",
     };
 
-    onChangeCb: (_: any) => void = () => { };
-    onTouchedCb: () => void = () => { };
+    onChangeCb: (_: any) => void = () => {
+    };
+    onTouchedCb: () => void = () => {
+    };
 
-    constructor(private utilService: UtilService, private vcRef: ViewContainerRef, private cfr: ComponentFactoryResolver, private renderer: Renderer, private elem: ElementRef) {}
+    constructor(private utilService: UtilService, private vcRef: ViewContainerRef, private cfr: ComponentFactoryResolver, private renderer: Renderer, private elem: ElementRef) {
+    }
 
     @HostListener("keyup", ["$event"]) onKeyUp(evt: KeyboardEvent) {
         if (evt.keyCode === 27) {
@@ -126,21 +165,23 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
     }
 
     public writeValue(value: Object): void {
-        if(typeof value === 'string'){
+        if (typeof value === 'string') {
             let val: Date = new Date(value);
             let date = {
                 year: val.getFullYear(),
                 month: val.getMonth() + 1,
-                day: val.getDate()};
+                day: val.getDate()
+            };
             let formatted: string = this.utilService.formatDate(date, this.opts.dateFormat, this.opts.monthLabels);
             this.setInputValue(formatted);
             this.emitInputFieldChanged(formatted, true);
         }
-        if(value && value instanceof Date ){
+        if (value && value instanceof Date) {
             let date = {
                 year: value.getFullYear(),
                 month: value.getMonth() + 1,
-                day: value.getDate()};
+                day: value.getDate()
+            };
             let formatted: string = this.utilService.formatDate(date, this.opts.dateFormat, this.opts.monthLabels);
             this.setInputValue(formatted);
             this.emitInputFieldChanged(formatted, true);
@@ -179,9 +220,9 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
                     this.emitDateChanged(dm);
                     this.updateModel(dm);
                     this.closeSelector(2);
-            },  (cvc: IMyCalendarViewChanged) => {
+                }, (cvc: IMyCalendarViewChanged) => {
                     this.emitCalendarChanged(cvc);
-            });
+                });
             this.emitCalendarToggle(1);
         }
         setTimeout(() => {
@@ -206,18 +247,18 @@ export class NgxMyDatePickerDirective implements OnChanges, ControlValueAccessor
         // Get local time as ISO string with offset at the end
         let tzo = -date.getTimezoneOffset();
         let dif = tzo >= 0 ? '+' : '-';
-        let pad = function(n: any, width: any) {
+        let pad = function (n: any, width: any) {
             width = width || 2;
             n = Math.abs(Math.floor(n)) + '';
             return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
         };
         return date.getFullYear()
-            + '-' + pad(date.getMonth()+1, null)
+            + '-' + pad(date.getMonth() + 1, null)
             + '-' + pad(date.getDate(), null)
             + 'T' + pad(date.getHours(), null)
             + ':' + pad(date.getMinutes(), null)
             + ':' + pad(date.getSeconds(), null)
-            + '.' + pad(date.getMilliseconds(),3)
+            + '.' + pad(date.getMilliseconds(), 3)
             + dif + pad(tzo / 60, null)
             + ':' + pad(tzo % 60, null);
     }
